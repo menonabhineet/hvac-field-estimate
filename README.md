@@ -1,29 +1,53 @@
 # Field Estimate Tool
 
-## The Problem
+[Live Demo](URL_PLACEHOLDER_HERE)
 
-Our HVAC technicians are losing time on every service call.
+A robust, mobile-first web application designed for field technicians to generate service estimates and invoices on-site. Built with Next.js, Tailwind CSS, and Zustand. The application is entirely client-side, making it perfect for static hosting on platforms like GitHub Pages.
 
-Right now, when a tech gets to a job site and needs to give the customer an estimate, here's what happens: they flip through a product binder or scroll through a spreadsheet on their phone, look up equipment costs, try to remember the labor rates for different job types, factor in the specifics of the property, and then scribble numbers on a notepad or punch them into a calculator. Sometimes they call the office to double-check pricing. Sometimes they guess and adjust later.
+## Approach: What I Built
 
-The customer is standing there the whole time.
+I built a multi-step, highly responsive field estimation tool that allows HVAC technicians to quickly select a customer, add required equipment, calculate labor hours, apply manual adjustments, and generate a final invoice. The primary goal was to create a friction-free, native app-like experience within a web browser, ensuring technicians can perform their work quickly while out in the field.
 
-A simple repair estimate might take 10-15 minutes. A full system replacement quote can take 30-45 minutes on-site, and that's before the tech has to go back to their truck to write it up in a way the customer can actually read. Some techs text a photo of their handwritten notes to the office and have someone there type it up. Others just wing it and send a "real" estimate later that evening.
+## Approach: Why I Made These Choices
 
-We've got about 40 technicians in the field. If each one does 4-6 estimates a day, that's a lot of wasted time — and a lot of customers standing around waiting. We've heard from customers that the wait makes the whole experience feel less professional, and we've definitely lost jobs because a competitor got a clean estimate out faster.
+The architecture and UX decisions were driven by the constraints and realities of working in the field:
 
-## What We Have
+*   **Responsive Split-Screen Architecture**: Designed primarily for mobile usage on-site, the interface uses a fluid, single-column stepper. However, when viewed on tablets or desktops, the layout intelligently utilizes CSS Grid to present a dual-pane view, keeping the invoice summary pinned to the right side while the technician navigates the steps on the left.
+*   **Fuzzy Search**: Powered by Fuse.js, the customer and equipment search bars tolerate typos and partial matches, drastically reducing the time spent hunting for specific parts or addresses on a small keyboard.
+*   **State Persistence**: The entire estimate state is managed by Zustand and hooked into local storage persistence. If a technician accidentally refreshes the page or loses connection, absolutely no data is lost.
+*   **Micro-Animations**: Framer Motion is integrated to provide smooth page transitions and list item animations, giving the tool a premium, native application feel.
+*   **Print Layout for Invoices**: Instead of generating a server-driven PDF, the tool leverages a dedicated CSS print media layout. When the technician generates an invoice, all UI elements are stripped away, presenting a clean, professional document that can be natively saved as a PDF on iOS or Android devices.
+*   **Barcode Scanner**: Integrated camera scanning via react-zxing allows technicians to scan equipment barcodes on-site for immediate lookup.
+*   **Quick-Add Favorites**: A dedicated horizontal scrolling row in the equipment step provides one-tap access to high-frequency parts like capacitors and ignitors.
+*   **PWA Ready**: Includes a manifest file and Apple meta tags, allowing technicians to install the tool directly to their home screen as a standalone application.
 
-In the `data/` folder, you'll find some of the information our techs work with:
+## Approach: What I Would Do Differently With More Time
 
-- **equipment.json** — Our catalog of HVAC equipment and parts with pricing
-- **labor_rates.json** — What we charge for different types of work
-- **customers.json** — A sample of customer and property records
+Given more time, I would expand the application beyond a static frontend prototype in the following ways:
 
-This is real-ish data pulled from our systems. It's not perfect — some of it was exported from different tools at different times, so it might not all look the same.
+*   **Real Backend Integration**: Migrate from flat JSON files to a relational database (like PostgreSQL with Prisma) to handle dynamic updates to labor rates, customer profiles, and a rapidly expanding equipment inventory.
+*   **True Offline-First Sync**: While Zustand local storage prevents accidental data loss, I would implement a robust offline-first architecture (e.g., WatermelonDB or RxDB). This would allow technicians to complete full estimates in cellular dead zones and automatically sync the data back to the server once they reconnect.
+*   **Authentication and Tenant Isolation**: Implement NextAuth to allow secure technician logins. This would support multi-tenancy, where different HVAC branches could manage their own customers and inventory.
+*   **Server-Side Document Generation**: The current CSS print layout is clever and lightweight, but integrating a library like react-pdf on a Node server would allow for pixel-perfect, multi-page document generation that could be emailed directly to the customer without requiring the technician to manually save and attach a file.
 
-## What We're Asking
+## Tech Stack
 
-Build something that helps.
+*   Framework: Next.js (App Router, Static Export)
+*   Styling: Tailwind CSS
+*   State Management: Zustand
+*   Icons: Lucide React
+*   Search: Fuse.js
+*   Animations: Framer Motion
+*   Scanner: react-zxing
 
-Fork this repo, build your solution, and include a short write-up explaining your approach — what you built, why you made the choices you did, and what you'd do differently with more time.
+## How to Run Locally
+
+1.  Clone the repository:
+    `git clone <repo_url>`
+2.  Navigate into the project directory:
+    `cd <project_directory>`
+3.  Install the dependencies:
+    `npm install`
+4.  Start the development server:
+    `npm run dev`
+5.  Open `http://localhost:3000` in your web browser.
