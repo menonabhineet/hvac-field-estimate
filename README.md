@@ -1,6 +1,8 @@
 # Field Estimate Tool
 
-[Live Demo](URL_PLACEHOLDER_HERE)
+[Live Demo](https://menonabhineet.github.io/hvac-field-estimate/)
+
+**Testing Note:** Please test the application on both mobile and desktop views! It features two completely distinct, highly optimized layouts depending on the screen size. Prioritize testing on a mobile device or responsive mobile view, as this tool is primarily designed for field technicians working on their phones.
 
 A robust, mobile-first web application designed for field technicians to generate service estimates and invoices on-site. Built with Next.js, Tailwind CSS, and Zustand. The application is entirely client-side, making it perfect for static hosting on platforms like GitHub Pages.
 
