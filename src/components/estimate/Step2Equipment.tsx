@@ -23,11 +23,11 @@ const favoriteEquipment = allEquipment.filter(eq => FAVORITE_IDS.includes(eq.id)
 
 function BarcodeScannerModal({ onClose, onResult }: { onClose: () => void, onResult: (text: string) => void }) {
   const { ref } = useZxing({
-    onDecodeResult(result) {
+    onDecodeResult(result: any) {
       onResult(result.getText());
     },
-    onError(error) {
-      if (error.name === 'NotAllowedError') {
+    onError(error: any) {
+      if (error?.name === 'NotAllowedError') {
         alert('Camera access denied. Please enable camera permissions in your browser to use the scanner.');
         onClose();
       }
