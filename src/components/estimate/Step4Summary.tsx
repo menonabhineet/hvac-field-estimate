@@ -49,13 +49,13 @@ export function Step4Summary({ onEditStep, isPrintMode = false }: { onEditStep: 
     <div className="space-y-6 pb-28">
       <div className="flex items-center justify-between print:hidden">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-slate-900">
+          <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
             Review Estimate
           </h2>
-          <p className="text-slate-500">Final review before showing the customer.</p>
+          <p className="text-slate-500 dark:text-slate-400">Final review before showing the customer.</p>
         </div>
         <div className="flex items-center gap-3">
-          <Button variant="outline" size="sm" onClick={handleReset} className="text-slate-500 hover:text-red-600 border-slate-200">
+          <Button variant="outline" size="sm" onClick={handleReset} className="text-slate-500 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-400 border-slate-200 dark:border-slate-700">
             <RefreshCcw className="mr-2 h-4 w-4" />
             New Estimate
           </Button>
@@ -65,27 +65,27 @@ export function Step4Summary({ onEditStep, isPrintMode = false }: { onEditStep: 
 
       {/* Customer Info */}
       <Card className="print:shadow-none print:border-slate-300">
-        <CardHeader className="pb-3 border-b border-slate-100 flex flex-row items-center justify-between">
-          <CardTitle className="text-sm text-slate-500 uppercase tracking-wider font-semibold print:text-slate-900">Bill To</CardTitle>
+        <CardHeader className="pb-3 border-b border-slate-100 dark:border-slate-800 flex flex-row items-center justify-between">
+          <CardTitle className="text-sm text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold print:text-slate-900">Bill To</CardTitle>
           {!isPrintMode && (
-            <button onClick={() => onEditStep(1)} className="text-slate-400 hover:text-blue-600 transition-colors print:hidden">
+            <button onClick={() => onEditStep(1)} className="text-slate-400 dark:text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors print:hidden">
               <Edit2 className="h-4 w-4" />
             </button>
           )}
         </CardHeader>
         <CardContent className="pt-4">
-          <h3 className="font-bold text-lg text-slate-900">{customer.name}</h3>
-          <p className="text-slate-600 mt-1">{customer.address}</p>
-          {customer.phone && <p className="text-slate-600">{customer.phone}</p>}
+          <h3 className="font-bold text-lg text-slate-900 dark:text-slate-100">{customer.name}</h3>
+          <p className="text-slate-600 dark:text-slate-400 mt-1">{customer.address}</p>
+          {customer.phone && <p className="text-slate-600 dark:text-slate-400">{customer.phone}</p>}
         </CardContent>
       </Card>
 
       {/* Equipment List */}
       <Card className="print:shadow-none print:border-slate-300">
-        <CardHeader className="pb-3 border-b border-slate-100 flex flex-row items-center justify-between">
-          <CardTitle className="text-sm text-slate-500 uppercase tracking-wider font-semibold print:text-slate-900">Equipment & Parts</CardTitle>
+        <CardHeader className="pb-3 border-b border-slate-100 dark:border-slate-800 flex flex-row items-center justify-between">
+          <CardTitle className="text-sm text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold print:text-slate-900">Equipment & Parts</CardTitle>
           {!isPrintMode && (
-            <button onClick={() => onEditStep(2)} className="text-slate-400 hover:text-blue-600 transition-colors print:hidden">
+            <button onClick={() => onEditStep(2)} className="text-slate-400 dark:text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors print:hidden">
               <Edit2 className="h-4 w-4" />
             </button>
           )}
@@ -96,11 +96,11 @@ export function Step4Summary({ onEditStep, isPrintMode = false }: { onEditStep: 
           ) : (
             equipmentList.map(item => (
               <div key={item.id} className="flex justify-between items-start text-sm">
-                <div className="pr-4 text-slate-700">
-                  <span className="font-medium text-slate-900">{item.name}</span>
-                  <div className="text-xs text-slate-500">Model: {item.modelNumber}</div>
+                <div className="pr-4 text-slate-700 dark:text-slate-300">
+                  <span className="font-medium text-slate-900 dark:text-slate-100">{item.name}</span>
+                  <div className="text-xs text-slate-500 dark:text-slate-400">Model: {item.modelNumber}</div>
                 </div>
-                <div className="font-medium whitespace-nowrap text-slate-900">
+                <div className="font-medium whitespace-nowrap text-slate-900 dark:text-slate-100">
                   {formatCurrency(item.baseCost || item.base_cost || 0)}
                 </div>
               </div>
@@ -111,10 +111,10 @@ export function Step4Summary({ onEditStep, isPrintMode = false }: { onEditStep: 
 
       {/* Labor List */}
       <Card className="print:shadow-none print:border-slate-300">
-        <CardHeader className="pb-3 border-b border-slate-100 flex flex-row items-center justify-between">
-          <CardTitle className="text-sm text-slate-500 uppercase tracking-wider font-semibold print:text-slate-900">Labor</CardTitle>
+        <CardHeader className="pb-3 border-b border-slate-100 dark:border-slate-800 flex flex-row items-center justify-between">
+          <CardTitle className="text-sm text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold print:text-slate-900">Labor</CardTitle>
           {!isPrintMode && (
-            <button onClick={() => onEditStep(3)} className="text-slate-400 hover:text-blue-600 transition-colors print:hidden">
+            <button onClick={() => onEditStep(3)} className="text-slate-400 dark:text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors print:hidden">
               <Edit2 className="h-4 w-4" />
             </button>
           )}
@@ -125,13 +125,13 @@ export function Step4Summary({ onEditStep, isPrintMode = false }: { onEditStep: 
           ) : (
             laborList.map(item => (
               <div key={`${item.rate.jobType}-${item.rate.level}`} className="flex justify-between items-start text-sm">
-                <div className="pr-4 text-slate-700">
-                  <span className="font-medium text-slate-900 capitalize">{item.rate.jobType} - {item.rate.level}</span>
-                  <div className="text-xs text-slate-500">
+                <div className="pr-4 text-slate-700 dark:text-slate-300">
+                  <span className="font-medium text-slate-900 dark:text-slate-100 capitalize">{item.rate.jobType} - {item.rate.level}</span>
+                  <div className="text-xs text-slate-500 dark:text-slate-400">
                     {item.hours} hrs @ {formatCurrency(item.rate.hourlyRate)}/hr
                   </div>
                 </div>
-                <div className="font-medium whitespace-nowrap text-slate-900">
+                <div className="font-medium whitespace-nowrap text-slate-900 dark:text-slate-100">
                   {formatCurrency(item.rate.hourlyRate * item.hours)}
                 </div>
               </div>
@@ -143,13 +143,13 @@ export function Step4Summary({ onEditStep, isPrintMode = false }: { onEditStep: 
       {/* Adjustments (Discount & Misc) */}
       {!isPrintMode && (
         <Card className="print:hidden">
-          <CardHeader className="pb-3 border-b border-slate-100">
-            <CardTitle className="text-sm text-slate-500 uppercase tracking-wider font-semibold">Adjustments</CardTitle>
+          <CardHeader className="pb-3 border-b border-slate-100 dark:border-slate-800">
+            <CardTitle className="text-sm text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">Adjustments</CardTitle>
           </CardHeader>
           <CardContent className="pt-4 space-y-4">
             <div className="flex gap-4">
               <div className="flex-1">
-                <label className="block text-sm font-medium text-slate-700 mb-1">Misc Charges ($)</label>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Misc Charges ($)</label>
                 <Input 
                   type="number" 
                   min="0"
@@ -159,7 +159,7 @@ export function Step4Summary({ onEditStep, isPrintMode = false }: { onEditStep: 
                 />
               </div>
               <div className="flex-1">
-                <label className="block text-sm font-medium text-slate-700 mb-1">Discount ($)</label>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Discount ($)</label>
                 <Input 
                   type="number"
                   min="0"
@@ -174,31 +174,31 @@ export function Step4Summary({ onEditStep, isPrintMode = false }: { onEditStep: 
       )}
 
       {/* Totals */}
-      <Card className="bg-slate-50 border-slate-200 print:bg-white print:border-slate-300 print:shadow-none">
+      <Card className="bg-slate-50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800 print:bg-white print:border-slate-300 print:shadow-none">
         <CardContent className="p-6 space-y-3">
-          <div className="flex justify-between text-sm text-slate-600 print:text-slate-800">
+          <div className="flex justify-between text-sm text-slate-600 dark:text-slate-400 print:text-slate-800">
             <span>Subtotal (Eq + Labor)</span>
             <span>{formatCurrency(equipmentTotal + laborTotal)}</span>
           </div>
           {(misc > 0 || isPrintMode) && misc > 0 && (
-            <div className="flex justify-between text-sm text-slate-600 print:text-slate-800">
+            <div className="flex justify-between text-sm text-slate-600 dark:text-slate-400 print:text-slate-800">
               <span>Misc Charges</span>
               <span>{formatCurrency(misc)}</span>
             </div>
           )}
           {(discount > 0 || isPrintMode) && discount > 0 && (
-            <div className="flex justify-between text-sm text-green-600 print:text-green-700 font-medium">
+            <div className="flex justify-between text-sm text-green-600 dark:text-green-500 print:text-green-700 font-medium">
               <span>Discount</span>
               <span>-{formatCurrency(discount)}</span>
             </div>
           )}
-          <div className="flex justify-between text-sm text-slate-600 print:text-slate-800">
+          <div className="flex justify-between text-sm text-slate-600 dark:text-slate-400 print:text-slate-800">
             <span>Estimated Tax (7%)</span>
             <span>{formatCurrency(tax)}</span>
           </div>
-          <div className="pt-3 border-t border-slate-200 print:border-slate-300 flex justify-between items-center">
-            <span className="font-bold text-lg text-slate-900">Total Estimate</span>
-            <span className="font-bold text-2xl text-blue-600 print:text-slate-900">{formatCurrency(finalTotal)}</span>
+          <div className="pt-3 border-t border-slate-200 dark:border-slate-700 print:border-slate-300 flex justify-between items-center">
+            <span className="font-bold text-lg text-slate-900 dark:text-slate-100">Total Estimate</span>
+            <span className="font-bold text-2xl text-blue-600 dark:text-blue-500 print:text-slate-900">{formatCurrency(finalTotal)}</span>
           </div>
         </CardContent>
       </Card>

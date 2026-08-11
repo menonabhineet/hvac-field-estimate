@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { ChevronRight, ChevronLeft } from 'lucide-react';
+import { ChevronRight, ChevronLeft, Moon, Sun } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTheme } from '@/components/ThemeProvider';
 import { useEstimateStore } from '@/store/useEstimateStore';
 import { Button } from '@/components/ui/Button';
 
@@ -19,6 +20,7 @@ export default function Home() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isDesktop, setIsDesktop] = useState(false);
   const { customer, equipmentList, laborList } = useEstimateStore();
+  const { theme, setTheme } = useTheme();
 
   useEffect(() => {
     const handleResize = () => setIsDesktop(window.innerWidth >= 768);
@@ -89,12 +91,24 @@ export default function Home() {
 
   return (
     <>
-      <main className="md:grid md:h-screen md:grid-cols-[1fr_minmax(280px,320px)] lg:grid-cols-[1fr_minmax(350px,450px)] md:overflow-hidden bg-slate-50 print:hidden">
+      <main className="md:grid md:h-screen md:grid-cols-[1fr_minmax(280px,320px)] lg:grid-cols-[1fr_minmax(350px,450px)] md:overflow-hidden bg-slate-50 dark:bg-slate-950 print:hidden">
         
         {/* LEFT PANE: Interactive Steps */}
-        <div className="relative flex flex-col md:h-screen md:overflow-y-auto bg-white shadow-xl z-10">
-          <div className="sticky top-0 z-40 bg-white/95 pb-2 pt-6 backdrop-blur-md border-b border-slate-100">
-            <Stepper currentStep={currentStep} totalSteps={isDesktop ? 3 : TOTAL_STEPS} />
+        <div className="relative flex flex-col md:h-screen md:overflow-y-auto bg-white dark:bg-slate-900 shadow-xl z-10">
+          <div className="sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 pb-6 pt-6 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 flex justify-center items-center relative">
+            <div className="w-full px-14 sm:px-16">
+              <Stepper currentStep={currentStep} totalSteps={isDesktop ? 3 : TOTAL_STEPS} />
+            </div>
+            <div className="absolute right-4 top-1/2 -translate-y-1/2">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                className="rounded-full text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-50"
+              >
+                {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+              </Button>
+            </div>
           </div>
 
           <div className="flex-1 px-4 md:px-8 py-6 pb-32 overflow-x-hidden">
@@ -122,10 +136,10 @@ export default function Home() {
 
           {/* Action Bar (Mobile Bottom / Desktop Bottom-Left) */}
           {(!isDesktop || currentStep <= 3) && (
-            <div className="fixed bottom-0 left-0 right-0 z-40 bg-white shadow-[0_-10px_20px_-10px_rgba(0,0,0,0.1)] md:absolute md:shadow-[0_-10px_20px_-10px_rgba(0,0,0,0.05)] border-t border-slate-100 flex flex-col">
+            <div className="fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-slate-900 shadow-[0_-10px_20px_-10px_rgba(0,0,0,0.1)] dark:shadow-[0_-10px_20px_-10px_rgba(0,0,0,0.5)] md:absolute md:shadow-[0_-10px_20px_-10px_rgba(0,0,0,0.05)] border-t border-slate-100 dark:border-slate-800 flex flex-col">
               {!isDesktop && currentStep < 4 && <LiveTotalBanner />}
               
-              <div className="flex items-center gap-3 p-4 bg-white">
+              <div className="flex items-center gap-3 p-4 bg-white dark:bg-slate-900">
                 {currentStep > 1 && (
                   <Button variant="outline" className="flex-1" onClick={handleBack}>
                     <ChevronLeft className="mr-2 h-4 w-4" /> Back
@@ -147,7 +161,7 @@ export default function Home() {
         </div>
 
         {/* RIGHT PANE: Sticky Summary (Tablet/Desktop Only) */}
-        <div className="hidden md:flex md:flex-col md:h-screen md:overflow-y-auto bg-slate-50 border-l border-slate-200">
+        <div className="hidden md:flex md:flex-col md:h-screen md:overflow-y-auto bg-slate-50 dark:bg-slate-950 border-l border-slate-200 dark:border-slate-800">
           <div className="p-6">
             <Step4Summary onEditStep={setCurrentStep} />
           </div>
@@ -162,8 +176,8 @@ export default function Home() {
             <p className="text-slate-500 mt-1">Official Estimate</p>
           </div>
           <div className="text-right text-slate-600 text-sm">
-            <p><strong>Date:</strong> {new Date().toLocaleDateString()}</p>
-            <p><strong>Est ID:</strong> #EST-{Math.floor(1000 + Math.random() * 9000)}</p>
+            <p suppressHydrationWarning><strong>Date:</strong> {new Date().toLocaleDateString()}</p>
+            <p suppressHydrationWarning><strong>Est ID:</strong> #EST-{Math.floor(1000 + Math.random() * 9000)}</p>
           </div>
         </div>
         <Step4Summary onEditStep={setCurrentStep} isPrintMode={true} />

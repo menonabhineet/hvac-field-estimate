@@ -21,6 +21,8 @@ The architecture and UX decisions were driven by the constraints and realities o
 *   **Print Layout for Invoices**: Instead of generating a server-driven PDF, the tool leverages a dedicated CSS print media layout. When the technician generates an invoice, all UI elements are stripped away, presenting a clean, professional document that can be natively saved as a PDF on iOS or Android devices.
 *   **Barcode Scanner**: Integrated camera scanning via react-zxing allows technicians to scan equipment barcodes on-site for immediate lookup.
 *   **Quick-Add Favorites**: A dedicated horizontal scrolling row in the equipment step provides one-tap access to high-frequency parts like capacitors and ignitors.
+*   **Dark Mode**: A fully custom, zero-flicker dark mode toggle built directly into a local context, allowing technicians to switch to a high-contrast dark theme for low-light environments without fighting OS defaults.
+*   **Toast Notifications**: Integrated `sonner` for sleek, non-intrusive pop-up notifications that confirm when equipment or labor items are successfully added to the invoice.
 *   **PWA Ready**: Includes a manifest file and Apple meta tags, allowing technicians to install the tool directly to their home screen as a standalone application.
 
 ## Approach: What I Would Do Differently With More Time
@@ -28,6 +30,7 @@ The architecture and UX decisions were driven by the constraints and realities o
 Given more time, I would expand the application beyond a static frontend prototype in the following ways:
 
 *   **Real Backend Integration**: Migrate from flat JSON files to a relational database (like PostgreSQL with Prisma) to handle dynamic updates to labor rates, customer profiles, and a rapidly expanding equipment inventory.
+*   **Customer Management System**: I would add the ability for technicians to dynamically add brand new customers on the fly, or quickly update existing addresses and contact details directly from the field.
 *   **True Offline-First Sync**: While Zustand local storage prevents accidental data loss, I would implement a robust offline-first architecture (e.g., WatermelonDB or RxDB). This would allow technicians to complete full estimates in cellular dead zones and automatically sync the data back to the server once they reconnect.
 *   **Authentication and Tenant Isolation**: Implement NextAuth to allow secure technician logins. This would support multi-tenancy, where different HVAC branches could manage their own customers and inventory.
 *   **Server-Side Document Generation**: The current CSS print layout is clever and lightweight, but integrating a library like react-pdf on a Node server would allow for pixel-perfect, multi-page document generation that could be emailed directly to the customer without requiring the technician to manually save and attach a file.

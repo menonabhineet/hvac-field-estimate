@@ -5,6 +5,7 @@ import { Search, Plus, Minus, Package, Star, ScanLine, X } from 'lucide-react';
 import Fuse from 'fuse.js';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useZxing } from 'react-zxing';
+import { toast } from 'sonner';
 import { Equipment } from '@/types';
 import { useEstimateStore } from '@/store/useEstimateStore';
 import { Card, CardContent } from '@/components/ui/Card';
@@ -91,20 +92,25 @@ export function Step2Equipment() {
     setIsScannerOpen(false);
   };
 
+  const handleAddEquipment = (eq: Equipment) => {
+    addEquipment(eq);
+    toast.success(`Added ${eq.name}`);
+  };
+
   return (
     <div className="space-y-6 pb-28">
       <div>
-        <h2 className="mb-2 text-2xl font-bold tracking-tight text-slate-900">
+        <h2 className="mb-2 text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
           Equipment & Parts
         </h2>
-        <p className="text-slate-500">
+        <p className="text-slate-500 dark:text-slate-400">
           Add necessary systems, parts, and materials.
         </p>
       </div>
 
       {/* Quick Add Favorites Row */}
       <div className="space-y-3">
-        <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-500 flex items-center">
+        <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center">
           <Star className="mr-1.5 h-4 w-4 text-amber-400 fill-amber-400" /> Quick Add
         </h3>
         <div className="-mx-4 flex overflow-x-auto px-4 pb-4 scrollbar-hide space-x-3">
@@ -113,19 +119,19 @@ export function Step2Equipment() {
             return (
               <div 
                 key={eq.id}
-                onClick={() => selected ? removeEquipment(eq.id) : addEquipment(eq)}
+                onClick={() => selected ? removeEquipment(eq.id) : handleAddEquipment(eq)}
                 className={`flex-shrink-0 w-40 cursor-pointer rounded-xl border p-3 transition-all active:scale-[0.97] ${
-                  selected ? 'border-blue-500 bg-blue-50 shadow-sm' : 'border-slate-200 bg-white hover:border-slate-300'
+                  selected ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 shadow-sm' : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300 dark:hover:border-slate-700'
                 }`}
               >
-                <div className="text-xs font-semibold text-slate-900 line-clamp-2 leading-tight h-8">
+                <div className="text-xs font-semibold text-slate-900 dark:text-slate-100 line-clamp-2 leading-tight h-8">
                   {eq.name}
                 </div>
                 <div className="mt-2 flex items-center justify-between">
-                  <span className="text-sm font-bold text-slate-700">
+                  <span className="text-sm font-bold text-slate-700 dark:text-slate-300">
                     {formatCurrency(eq.baseCost || eq.base_cost || 0)}
                   </span>
-                  <div className={`flex h-6 w-6 items-center justify-center rounded-full text-white ${selected ? 'bg-red-500' : 'bg-blue-600'}`}>
+                  <div className={`flex h-6 w-6 items-center justify-center rounded-full text-white ${selected ? 'bg-red-500 dark:bg-red-600' : 'bg-blue-600 dark:bg-blue-700'}`}>
                     {selected ? <Minus className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
                   </div>
                 </div>
@@ -207,23 +213,23 @@ export function Step2Equipment() {
                 >
                   <Card
                     className={`transition-all duration-200 ${
-                      selected ? 'border-blue-500 ring-1 ring-blue-500 shadow-md' : 'hover:border-slate-300'
+                      selected ? 'border-blue-500 dark:border-blue-500/50 ring-1 ring-blue-500 dark:ring-blue-500/50 shadow-md bg-blue-50/10' : 'hover:border-slate-300 dark:hover:border-slate-700'
                     }`}
                   >
                     <CardContent className="flex items-center p-4">
-                      <div className="mr-4 rounded-full bg-slate-100 p-2.5 text-slate-500 shrink-0">
+                      <div className="mr-4 rounded-full bg-slate-100 dark:bg-slate-800 p-2.5 text-slate-500 dark:text-slate-400 shrink-0">
                         <Package className="h-5 w-5" />
                       </div>
                       <div className="flex-1 space-y-1 min-w-0">
-                        <h3 className="font-semibold text-slate-900 leading-tight truncate">
+                        <h3 className="font-semibold text-slate-900 dark:text-slate-100 leading-tight truncate">
                           {eq.name}
                         </h3>
-                        <div className="flex flex-wrap gap-2 text-xs text-slate-500">
+                        <div className="flex flex-wrap gap-2 text-xs text-slate-500 dark:text-slate-400">
                           <span className="font-medium">{eq.brand}</span>
                           <span>•</span>
                           <span className="truncate font-mono">{eq.modelNumber}</span>
                         </div>
-                        <div className="text-sm font-bold text-slate-700 mt-1">
+                        <div className="text-sm font-bold text-slate-700 dark:text-slate-300 mt-1">
                           {formatCurrency(cost)}
                         </div>
                       </div>
@@ -241,8 +247,8 @@ export function Step2Equipment() {
                           <Button
                             size="icon"
                             variant="primary"
-                            onClick={() => addEquipment(eq)}
-                            className="h-10 w-10 rounded-full bg-slate-900 hover:bg-slate-800"
+                            onClick={() => handleAddEquipment(eq)}
+                            className="h-10 w-10 rounded-full bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 dark:hover:bg-slate-700"
                           >
                             <Plus className="h-5 w-5" />
                           </Button>

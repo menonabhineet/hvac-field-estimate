@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
+import { ThemeProvider } from '@/components/ThemeProvider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -15,26 +16,20 @@ export const metadata: Metadata = {
   },
 };
 
-export const viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
-};
-
-
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={`${inter.className} bg-slate-100`}>
-        {/* Container for the app */}
-        <div className="flex min-h-screen flex-col bg-slate-50 relative overflow-hidden">
-          {children}
-        </div>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${inter.className} bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-50 transition-colors duration-300`}>
+        <ThemeProvider>
+          {/* Container for the app */}
+          <div className="flex min-h-screen flex-col relative overflow-hidden">
+            {children}
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );

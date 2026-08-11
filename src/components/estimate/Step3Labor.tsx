@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react';
 import { Wrench, Clock, Check, Plus, Minus } from 'lucide-react';
+import { toast } from 'sonner';
 import { LaborRate } from '@/types';
 import { useEstimateStore } from '@/store/useEstimateStore';
 import { Card, CardContent } from '@/components/ui/Card';
@@ -49,13 +50,18 @@ export function Step3Labor() {
     }
   };
 
+  const handleAddLabor = (rate: LaborRate) => {
+    addLabor({ rate, hours: rate.estimatedHours.min });
+    toast.success(`Added ${rate.level} ${rate.jobType} labor`);
+  };
+
   return (
     <div className="space-y-6 pb-28">
       <div>
-        <h2 className="mb-2 text-2xl font-bold tracking-tight text-slate-900">
+        <h2 className="mb-2 text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
           Labor & Services
         </h2>
-        <p className="text-slate-500">
+        <p className="text-slate-500 dark:text-slate-400">
           Estimate the time required for the job.
         </p>
       </div>
@@ -63,8 +69,8 @@ export function Step3Labor() {
       <div className="space-y-8">
         {groupedLabor.map(([jobType, rates]) => (
           <div key={jobType} className="space-y-3">
-            <h3 className="text-lg font-bold capitalize text-slate-800 flex items-center">
-              <Wrench className="mr-2 h-5 w-5 text-slate-400" />
+            <h3 className="text-lg font-bold capitalize text-slate-800 dark:text-slate-200 flex items-center">
+              <Wrench className="mr-2 h-5 w-5 text-slate-400 dark:text-slate-500" />
               {jobType}
             </h3>
             
@@ -77,20 +83,20 @@ export function Step3Labor() {
                   <Card 
                     key={rate.level}
                     className={`transition-all duration-200 ${
-                      isSelected ? 'border-blue-500 ring-1 ring-blue-500 shadow-md' : 'hover:border-slate-300'
+                      isSelected ? 'border-blue-500 dark:border-blue-500/50 ring-1 ring-blue-500 dark:ring-blue-500/50 shadow-md bg-blue-50/10' : 'hover:border-slate-300 dark:hover:border-slate-700'
                     }`}
                   >
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between">
                         <div className="space-y-1">
-                          <h4 className="font-semibold text-slate-900 capitalize flex items-center">
+                          <h4 className="font-semibold text-slate-900 dark:text-slate-100 capitalize flex items-center">
                             {rate.level}
-                            {isSelected && <Check className="ml-2 h-4 w-4 text-blue-600" />}
+                            {isSelected && <Check className="ml-2 h-4 w-4 text-blue-600 dark:text-blue-500" />}
                           </h4>
-                          <div className="text-sm font-medium text-slate-600">
-                            {formatCurrency(rate.hourlyRate)} <span className="font-normal text-slate-400">/ hr</span>
+                          <div className="text-sm font-medium text-slate-600 dark:text-slate-400">
+                            {formatCurrency(rate.hourlyRate)} <span className="font-normal text-slate-400 dark:text-slate-500">/ hr</span>
                           </div>
-                          <div className="text-xs text-slate-500 flex items-center">
+                          <div className="text-xs text-slate-500 dark:text-slate-400 flex items-center">
                             <Clock className="mr-1 h-3 w-3" />
                             Est. {rate.estimatedHours.min}-{rate.estimatedHours.max} hrs
                           </div>
@@ -98,26 +104,26 @@ export function Step3Labor() {
 
                         {isSelected ? (
                           <div className="flex flex-col items-end space-y-2">
-                            <div className="flex items-center space-x-3 bg-slate-100 rounded-full p-1">
+                            <div className="flex items-center space-x-3 bg-slate-100 dark:bg-slate-800/50 rounded-full p-1 border border-transparent dark:border-slate-700/50">
                               <button 
                                 onClick={() => handleAdjustHours(rate, -0.5)}
-                                className="p-1 rounded-full bg-white shadow-sm hover:bg-slate-50 active:scale-95 transition-all text-slate-600"
+                                className="p-1 rounded-full bg-white dark:bg-slate-700 shadow-sm hover:bg-slate-50 dark:hover:bg-slate-600 active:scale-95 transition-all text-slate-600 dark:text-slate-300"
                               >
                                 <Minus className="h-4 w-4" />
                               </button>
-                              <span className="font-bold text-sm w-8 text-center tabular-nums text-slate-800">
+                              <span className="font-bold text-sm w-8 text-center tabular-nums text-slate-800 dark:text-slate-200">
                                 {selected.hours}h
                               </span>
                               <button 
                                 onClick={() => handleAdjustHours(rate, 0.5)}
-                                className="p-1 rounded-full bg-white shadow-sm hover:bg-slate-50 active:scale-95 transition-all text-slate-600"
+                                className="p-1 rounded-full bg-white dark:bg-slate-700 shadow-sm hover:bg-slate-50 dark:hover:bg-slate-600 active:scale-95 transition-all text-slate-600 dark:text-slate-300"
                               >
                                 <Plus className="h-4 w-4" />
                               </button>
                             </div>
                             <button
                               onClick={() => removeLabor(rate.jobType, rate.level)}
-                              className="text-xs font-semibold text-red-500 hover:text-red-600 pr-2"
+                              className="text-xs font-semibold text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 pr-2"
                             >
                               Remove
                             </button>
@@ -127,7 +133,7 @@ export function Step3Labor() {
                             variant="outline"
                             size="sm"
                             className="rounded-full"
-                            onClick={() => addLabor({ rate, hours: rate.estimatedHours.min })}
+                            onClick={() => handleAddLabor(rate)}
                           >
                             Select
                           </Button>
@@ -135,9 +141,9 @@ export function Step3Labor() {
                       </div>
                       
                       {isSelected && (
-                        <div className="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center bg-slate-50/50 -mx-4 -mb-4 px-4 pb-4">
-                          <span className="text-sm text-slate-500">Labor Subtotal</span>
-                          <span className="font-bold text-blue-700">
+                        <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/20 -mx-4 -mb-4 px-4 pb-4">
+                          <span className="text-sm text-slate-500 dark:text-slate-400">Labor Subtotal</span>
+                          <span className="font-bold text-blue-700 dark:text-blue-400">
                             {formatCurrency(rate.hourlyRate * selected.hours)}
                           </span>
                         </div>

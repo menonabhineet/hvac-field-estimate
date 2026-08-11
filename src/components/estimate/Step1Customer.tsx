@@ -29,10 +29,10 @@ export function Step1Customer() {
   return (
     <div className="space-y-6 pb-24">
       <div>
-        <h2 className="mb-2 text-2xl font-bold tracking-tight text-slate-900">
+        <h2 className="mb-2 text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
           Select Customer
         </h2>
-        <p className="text-slate-500">
+        <p className="text-slate-500 dark:text-slate-400">
           Search for a customer to start the estimate.
         </p>
       </div>
@@ -47,7 +47,7 @@ export function Step1Customer() {
 
       <div className="space-y-4">
         {filteredCustomers.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-slate-300 p-8 text-center text-slate-500">
+          <div className="rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 p-8 text-center text-slate-500 dark:text-slate-400">
             No customers found.
           </div>
         ) : (
@@ -60,13 +60,13 @@ export function Step1Customer() {
                 key={cust.id}
                 className={`cursor-pointer transition-all duration-200 active:scale-[0.98] ${
                   isSelected
-                    ? 'border-blue-500 bg-blue-50/50 shadow-md ring-1 ring-blue-500'
-                    : 'hover:border-slate-300 hover:shadow-sm'
+                    ? 'border-blue-500 dark:border-blue-500/50 bg-blue-50/50 dark:bg-blue-900/20 shadow-md ring-1 ring-blue-500 dark:ring-blue-500/50'
+                    : 'hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-sm'
                 }`}
                 onClick={() => isSelected ? setCustomer(null) : setCustomer(cust)}
               >
                 <CardContent className="flex items-start p-5">
-                  <div className="mr-4 mt-1 rounded-full bg-slate-100 p-2.5 text-slate-500">
+                  <div className="mr-4 mt-1 rounded-full bg-slate-100 dark:bg-slate-800 p-2.5 text-slate-500 dark:text-slate-400">
                     {propType === 'commercial' ? (
                       <Building className="h-5 w-5" />
                     ) : (
@@ -75,12 +75,12 @@ export function Step1Customer() {
                   </div>
                   <div className="flex-1 min-w-0 space-y-1">
                     <div className="flex items-center justify-between">
-                      <h3 className="font-semibold text-slate-900 truncate">{cust.name}</h3>
+                      <h3 className="font-semibold text-slate-900 dark:text-slate-100 truncate">{cust.name}</h3>
                       {isSelected && (
-                        <CheckCircle2 className="h-5 w-5 text-blue-600 shrink-0 ml-2" />
+                        <CheckCircle2 className="h-5 w-5 text-blue-600 dark:text-blue-500 shrink-0 ml-2" />
                       )}
                     </div>
-                    <div className="flex items-start text-sm text-slate-500">
+                    <div className="flex items-start text-sm text-slate-500 dark:text-slate-400">
                       <MapPin className="mr-1 mt-0.5 h-3.5 w-3.5 shrink-0" />
                       <span className="line-clamp-2 leading-snug">{cust.address}</span>
                     </div>
