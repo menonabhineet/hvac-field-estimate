@@ -27,7 +27,10 @@ export function Step4Summary({ onEditStep, isPrintMode = false }: { onEditStep: 
     0
   );
 
-  const subtotal = equipmentTotal + laborTotal + misc - discount;
+  const maxDiscount = equipmentTotal + laborTotal + misc;
+  const effectiveDiscount = Math.min(discount, maxDiscount);
+
+  const subtotal = equipmentTotal + laborTotal + misc - effectiveDiscount;
   const taxRate = 0.07; // 7% tax for example
   const tax = subtotal * taxRate;
   const finalTotal = subtotal + tax;
@@ -46,7 +49,7 @@ export function Step4Summary({ onEditStep, isPrintMode = false }: { onEditStep: 
   }
 
   return (
-    <div className="space-y-6 pb-28">
+    <div className="space-y-6 print:space-y-4 pb-28 print:pb-0">
       <div className="flex items-center justify-between print:hidden">
         <div>
           <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
@@ -64,7 +67,7 @@ export function Step4Summary({ onEditStep, isPrintMode = false }: { onEditStep: 
       </div>
 
       {/* Customer Info */}
-      <Card className="print:shadow-none print:border-slate-300">
+      <Card className="print:shadow-none print:border-slate-300 print:break-inside-avoid">
         <CardHeader className="pb-3 border-b border-slate-100 dark:border-slate-800 flex flex-row items-center justify-between">
           <CardTitle className="text-sm text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold print:text-slate-900">Bill To</CardTitle>
           {!isPrintMode && (
@@ -81,7 +84,7 @@ export function Step4Summary({ onEditStep, isPrintMode = false }: { onEditStep: 
       </Card>
 
       {/* Equipment List */}
-      <Card className="print:shadow-none print:border-slate-300">
+      <Card className="print:shadow-none print:border-slate-300 print:break-inside-avoid">
         <CardHeader className="pb-3 border-b border-slate-100 dark:border-slate-800 flex flex-row items-center justify-between">
           <CardTitle className="text-sm text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold print:text-slate-900">Equipment & Parts</CardTitle>
           {!isPrintMode && (
@@ -91,26 +94,40 @@ export function Step4Summary({ onEditStep, isPrintMode = false }: { onEditStep: 
           )}
         </CardHeader>
         <CardContent className="pt-4 space-y-3">
-          {equipmentList.length === 0 ? (
-            <p className="text-sm text-slate-400 italic">No equipment added.</p>
-          ) : (
-            equipmentList.map(item => (
+          {(() => {
+            const aggregated = equipmentList.reduce((acc, item) => {
+              const existing = acc.find(x => x.item.id === item.id);
+              if (existing) {
+                existing.quantity += 1;
+              } else {
+                acc.push({ item, quantity: 1 });
+              }
+              return acc;
+            }, [] as { item: any; quantity: number }[]);
+
+            if (aggregated.length === 0) {
+              return <p className="text-sm text-slate-400 italic">No equipment added.</p>;
+            }
+
+            return aggregated.map(({ item, quantity }) => (
               <div key={item.id} className="flex justify-between items-start text-sm">
                 <div className="pr-4 text-slate-700 dark:text-slate-300">
-                  <span className="font-medium text-slate-900 dark:text-slate-100">{item.name}</span>
+                  <span className="font-medium text-slate-900 dark:text-slate-100">
+                    {item.name} {quantity > 1 && <span className="text-blue-600 dark:text-blue-400 font-bold ml-1">(x{quantity})</span>}
+                  </span>
                   <div className="text-xs text-slate-500 dark:text-slate-400">Model: {item.modelNumber}</div>
                 </div>
                 <div className="font-medium whitespace-nowrap text-slate-900 dark:text-slate-100">
-                  {formatCurrency(item.baseCost || item.base_cost || 0)}
+                  {formatCurrency((item.baseCost || item.base_cost || 0) * quantity)}
                 </div>
               </div>
-            ))
-          )}
+            ));
+          })()}
         </CardContent>
       </Card>
 
       {/* Labor List */}
-      <Card className="print:shadow-none print:border-slate-300">
+      <Card className="print:shadow-none print:border-slate-300 print:break-inside-avoid">
         <CardHeader className="pb-3 border-b border-slate-100 dark:border-slate-800 flex flex-row items-center justify-between">
           <CardTitle className="text-sm text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold print:text-slate-900">Labor</CardTitle>
           {!isPrintMode && (
@@ -154,7 +171,10 @@ export function Step4Summary({ onEditStep, isPrintMode = false }: { onEditStep: 
                   type="number" 
                   min="0"
                   value={misc || ''}
-                  onChange={(e) => setMisc(parseFloat(e.target.value) || 0)}
+                  onChange={(e) => {
+                    const val = Math.max(0, parseFloat(e.target.value) || 0);
+                    setMisc(val);
+                  }}
                   placeholder="0.00"
                 />
               </div>
@@ -163,8 +183,12 @@ export function Step4Summary({ onEditStep, isPrintMode = false }: { onEditStep: 
                 <Input 
                   type="number"
                   min="0"
+                  max={maxDiscount}
                   value={discount || ''}
-                  onChange={(e) => setDiscount(parseFloat(e.target.value) || 0)}
+                  onChange={(e) => {
+                    const val = Math.max(0, parseFloat(e.target.value) || 0);
+                    setDiscount(Math.min(val, maxDiscount));
+                  }}
                   placeholder="0.00"
                 />
               </div>
@@ -174,7 +198,7 @@ export function Step4Summary({ onEditStep, isPrintMode = false }: { onEditStep: 
       )}
 
       {/* Totals */}
-      <Card className="bg-slate-50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800 print:bg-white print:border-slate-300 print:shadow-none">
+      <Card className="bg-slate-50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800 print:bg-white print:border-slate-300 print:shadow-none print:break-inside-avoid">
         <CardContent className="p-6 space-y-3">
           <div className="flex justify-between text-sm text-slate-600 dark:text-slate-400 print:text-slate-800">
             <span>Subtotal (Eq + Labor)</span>
@@ -186,10 +210,10 @@ export function Step4Summary({ onEditStep, isPrintMode = false }: { onEditStep: 
               <span>{formatCurrency(misc)}</span>
             </div>
           )}
-          {(discount > 0 || isPrintMode) && discount > 0 && (
+          {(effectiveDiscount > 0 || isPrintMode) && effectiveDiscount > 0 && (
             <div className="flex justify-between text-sm text-green-600 dark:text-green-500 print:text-green-700 font-medium">
               <span>Discount</span>
-              <span>-{formatCurrency(discount)}</span>
+              <span>-{formatCurrency(effectiveDiscount)}</span>
             </div>
           )}
           <div className="flex justify-between text-sm text-slate-600 dark:text-slate-400 print:text-slate-800">
@@ -211,7 +235,7 @@ export function Step4Summary({ onEditStep, isPrintMode = false }: { onEditStep: 
           disabled={equipmentList.length === 0 && laborList.length === 0}
         >
           <Download className="mr-2 h-5 w-5" />
-          Generate & Save Invoice
+          Generate & Save Quote
         </Button>
       )}
     </div>

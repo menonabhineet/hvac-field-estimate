@@ -17,9 +17,15 @@ export const useEstimateStore = create<EstimateState>()(
         equipmentList: [...state.equipmentList, equipment]
       })),
       
-      removeEquipment: (equipmentId) => set((state) => ({
-        equipmentList: state.equipmentList.filter(eq => eq.id !== equipmentId)
-      })),
+      removeEquipment: (equipmentId) => set((state) => {
+        const index = state.equipmentList.findIndex(eq => eq.id === equipmentId);
+        if (index > -1) {
+          const newList = [...state.equipmentList];
+          newList.splice(index, 1);
+          return { equipmentList: newList };
+        }
+        return state;
+      }),
       
       addLabor: (labor) => set((state) => {
         // Check if labor already exists for this jobType and level

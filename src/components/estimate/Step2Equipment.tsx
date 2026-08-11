@@ -83,7 +83,7 @@ export function Step2Equipment() {
     return result;
   }, [searchQuery, selectedCategory]);
 
-  const isSelected = (id: string) => equipmentList.some(e => e.id === id);
+  const getQuantity = (id: string) => equipmentList.filter(e => e.id === id).length;
 
   const handleScanResult = (text: string) => {
     // In a real app, you might look up the exact UPC or model number.
@@ -115,15 +115,21 @@ export function Step2Equipment() {
         </h3>
         <div className="-mx-4 flex overflow-x-auto px-4 pb-4 scrollbar-hide space-x-3">
           {favoriteEquipment.map(eq => {
-            const selected = isSelected(eq.id);
+            const quantity = getQuantity(eq.id);
+            const selected = quantity > 0;
             return (
               <div 
                 key={eq.id}
-                onClick={() => selected ? removeEquipment(eq.id) : handleAddEquipment(eq)}
-                className={`flex-shrink-0 w-40 cursor-pointer rounded-xl border p-3 transition-all active:scale-[0.97] ${
+                onClick={() => handleAddEquipment(eq)}
+                className={`relative flex-shrink-0 w-40 cursor-pointer rounded-xl border p-3 transition-all active:scale-[0.97] ${
                   selected ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 shadow-sm' : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300 dark:hover:border-slate-700'
                 }`}
               >
+                {selected && (
+                  <div className="absolute -top-2 -right-2 bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold border-2 border-white dark:border-slate-900 shadow-sm z-10">
+                    {quantity}
+                  </div>
+                )}
                 <div className="text-xs font-semibold text-slate-900 dark:text-slate-100 line-clamp-2 leading-tight h-8">
                   {eq.name}
                 </div>
@@ -131,8 +137,21 @@ export function Step2Equipment() {
                   <span className="text-sm font-bold text-slate-700 dark:text-slate-300">
                     {formatCurrency(eq.baseCost || eq.base_cost || 0)}
                   </span>
-                  <div className={`flex h-6 w-6 items-center justify-center rounded-full text-white ${selected ? 'bg-red-500 dark:bg-red-600' : 'bg-blue-600 dark:bg-blue-700'}`}>
-                    {selected ? <Minus className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+                  <div className="flex items-center gap-1.5">
+                    {selected && (
+                      <div 
+                        onClick={(e) => { e.stopPropagation(); removeEquipment(eq.id); }} 
+                        className="flex h-6 w-6 items-center justify-center rounded-full text-slate-600 bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600"
+                      >
+                        <Minus className="h-3 w-3" />
+                      </div>
+                    )}
+                    <div 
+                      onClick={(e) => { e.stopPropagation(); handleAddEquipment(eq); }} 
+                      className="flex h-6 w-6 items-center justify-center rounded-full text-white bg-blue-600 hover:bg-blue-700"
+                    >
+                      <Plus className="h-4 w-4" />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -199,7 +218,8 @@ export function Step2Equipment() {
         ) : (
           <AnimatePresence>
             {filteredEquipment.map((eq) => {
-              const selected = isSelected(eq.id);
+              const quantity = getQuantity(eq.id);
+              const selected = quantity > 0;
               const cost = eq.baseCost || eq.base_cost || 0;
 
               return (
@@ -233,16 +253,27 @@ export function Step2Equipment() {
                           {formatCurrency(cost)}
                         </div>
                       </div>
-                      <div className="ml-4 shrink-0">
+                      <div className="ml-4 shrink-0 flex items-center gap-3">
                         {selected ? (
-                          <Button
-                            size="icon"
-                            variant="danger"
-                            onClick={() => removeEquipment(eq.id)}
-                            className="h-10 w-10 rounded-full"
-                          >
-                            <Minus className="h-5 w-5" />
-                          </Button>
+                          <>
+                            <Button
+                              size="icon"
+                              variant="outline"
+                              onClick={() => removeEquipment(eq.id)}
+                              className="h-9 w-9 rounded-full border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-300"
+                            >
+                              <Minus className="h-4 w-4" />
+                            </Button>
+                            <span className="font-bold w-4 text-center text-slate-900 dark:text-slate-100">{quantity}</span>
+                            <Button
+                              size="icon"
+                              variant="outline"
+                              onClick={() => handleAddEquipment(eq)}
+                              className="h-9 w-9 rounded-full border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-300"
+                            >
+                              <Plus className="h-4 w-4" />
+                            </Button>
+                          </>
                         ) : (
                           <Button
                             size="icon"

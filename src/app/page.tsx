@@ -32,7 +32,7 @@ export default function Home() {
   const handleNext = () => {
     if (isDesktop && currentStep === 3) {
       if (equipmentList.length === 0 && laborList.length === 0) {
-         alert('Please add at least one equipment or labor item before generating an invoice.');
+         alert('Please add at least one equipment or labor item before generating a quote.');
          return;
       }
       window.print();
@@ -151,7 +151,7 @@ export default function Home() {
                     onClick={handleNext}
                     disabled={!canProceed()}
                   >
-                    {isDesktop && currentStep === 3 ? 'Generate Invoice' : 'Continue'} 
+                    {isDesktop && currentStep === 3 ? 'Generate Quote' : 'Continue'} 
                     {!(isDesktop && currentStep === 3) && <ChevronRight className="ml-2 h-4 w-4" />}
                   </Button>
                 )}
@@ -171,12 +171,17 @@ export default function Home() {
       {/* PRINT LAYOUT: Only visible during window.print() */}
       <div className="hidden print:block bg-white text-black p-8 max-w-4xl mx-auto">
         <div className="mb-8 border-b-2 border-slate-900 pb-4 flex justify-between items-end">
-          <div>
-            <h1 className="text-4xl font-black text-slate-900 tracking-tight">INVOICE</h1>
-            <p className="text-slate-500 mt-1">Official Estimate</p>
+          <div className="flex items-center gap-4">
+            <img src="icon-192.png" alt="Logo" className="w-14 h-14 object-contain rounded-xl" />
+            <div>
+              <h1 className="text-4xl font-black text-slate-900 tracking-tight leading-none">QUOTE</h1>
+              <p className="text-slate-500 mt-1">Official Estimate</p>
+            </div>
           </div>
           <div className="text-right text-slate-600 text-sm">
-            <p suppressHydrationWarning><strong>Date:</strong> {new Date().toLocaleDateString()}</p>
+            <p suppressHydrationWarning>
+              <strong>Date:</strong> {`${String(new Date().getMonth() + 1).padStart(2, '0')}-${String(new Date().getDate()).padStart(2, '0')}-${new Date().getFullYear()}`}
+            </p>
             <p suppressHydrationWarning><strong>Est ID:</strong> #EST-{Math.floor(1000 + Math.random() * 9000)}</p>
           </div>
         </div>

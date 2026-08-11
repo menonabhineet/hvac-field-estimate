@@ -4,26 +4,26 @@
 
 **Testing Note:** Please test the application on both mobile and desktop views! It features two completely distinct, highly optimized layouts depending on the screen size. Prioritize testing on a mobile device or responsive mobile view, as this tool is primarily designed for field technicians working on their phones.
 
-A robust, mobile-first web application designed for field technicians to generate service estimates and invoices on-site. Built with Next.js, Tailwind CSS, and Zustand. The application is entirely client-side, making it perfect for static hosting on platforms like GitHub Pages.
+A robust, mobile-first web application designed for field technicians to generate service estimates and quotes on-site. Built with Next.js, Tailwind CSS, and Zustand. The application is entirely client-side, making it perfect for static hosting on platforms like GitHub Pages.
 
 ## Approach: What I Built
 
-I built a multi-step, highly responsive field estimation tool that allows HVAC technicians to quickly select a customer, add required equipment, calculate labor hours, apply manual adjustments, and generate a final invoice. The primary goal was to create a friction-free, native app-like experience within a web browser, ensuring technicians can perform their work quickly while out in the field.
+I built a multi-step, highly responsive field estimation tool that allows HVAC technicians to quickly select a customer, add required equipment, calculate labor hours, apply manual adjustments, and generate a final quote. The primary goal was to create a friction-free, native app-like experience within a web browser, ensuring technicians can perform their work quickly while out in the field.
 
 ## Approach: Why I Made These Choices
 
 The architecture and UX decisions were driven by the constraints and realities of working in the field:
 
-*   **Responsive Split-Screen Architecture**: Designed primarily for mobile usage on-site, the interface uses a fluid, single-column stepper. However, when viewed on tablets or desktops, the layout intelligently utilizes CSS Grid to present a dual-pane view, keeping the invoice summary pinned to the right side while the technician navigates the steps on the left.
+*   **Responsive Split-Screen Architecture**: Designed primarily for mobile usage on-site, the interface uses a fluid, single-column stepper. However, when viewed on tablets or desktops, the layout intelligently utilizes CSS Grid to present a dual-pane view, keeping the quote summary pinned to the right side while the technician navigates the steps on the left.
 *   **Fuzzy Search**: Powered by Fuse.js, the customer and equipment search bars tolerate typos and partial matches, drastically reducing the time spent hunting for specific parts or addresses on a small keyboard.
 *   **State Persistence**: The entire estimate state is managed by Zustand and hooked into local storage persistence. If a technician accidentally refreshes the page or loses connection, absolutely no data is lost.
 *   **Micro-Animations**: Framer Motion is integrated to provide smooth page transitions and list item animations, giving the tool a premium, native application feel.
-*   **Print Layout for Invoices**: Instead of generating a server-driven PDF, the tool leverages a dedicated CSS print media layout. When the technician generates an invoice, all UI elements are stripped away, presenting a clean, professional document that can be natively saved as a PDF on iOS or Android devices.
+*   **Print Layout for Quotes**: Instead of generating a server-driven PDF, the tool leverages a dedicated CSS print media layout. When the technician generates a quote, all UI elements are stripped away, presenting a clean, professional document that can be natively saved as a PDF on iOS or Android devices.
 *   **Barcode Scanner**: Integrated camera scanning via react-zxing allows technicians to scan equipment barcodes on-site for immediate lookup.
 *   **Quick-Add Favorites**: A dedicated horizontal scrolling row in the equipment step provides one-tap access to high-frequency parts like capacitors and ignitors.
 *   **Dark Mode**: A fully custom, zero-flicker dark mode toggle built directly into a local context, allowing technicians to switch to a high-contrast dark theme for low-light environments without fighting OS defaults.
-*   **Toast Notifications**: Integrated `sonner` for sleek, non-intrusive pop-up notifications that confirm when equipment or labor items are successfully added to the invoice.
-*   **PWA Ready**: Includes a manifest file and Apple meta tags, allowing technicians to install the tool directly to their home screen as a standalone application.
+*   **Toast Notifications**: Integrated `sonner` for sleek, non-intrusive pop-up notifications that confirm when equipment or labor items are successfully added to the quote.
+*   **PWA Ready (Native App Experience)**: Includes a manifest file and Apple meta tags. This means the tool can be directly downloaded from the browser and installed to the home screen, functioning identically to a native app on both **Android** and **iOS** devices.
 
 ## Approach: What I Would Do Differently With More Time
 
@@ -48,7 +48,7 @@ Given more time, I would expand the application beyond a static frontend prototy
 ## How to Run Locally
 
 1.  Clone the repository:
-    `git clone <repo_url>`
+    `git clone https://github.com/menonabhineet/hvac-field-estimate`
 2.  Navigate into the project directory:
     `cd <project_directory>`
 3.  Install the dependencies:

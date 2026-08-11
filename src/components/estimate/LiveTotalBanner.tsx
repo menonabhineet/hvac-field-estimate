@@ -14,7 +14,10 @@ export function LiveTotalBanner() {
     0
   );
 
-  const subtotal = equipmentTotal + laborTotal + (misc || 0) - (discount || 0);
+  const maxDiscount = equipmentTotal + laborTotal + (misc || 0);
+  const effectiveDiscount = Math.min((discount || 0), maxDiscount);
+
+  const subtotal = maxDiscount - effectiveDiscount;
   const total = subtotal + (subtotal * 0.07);
 
   if (total === 0) return null;
